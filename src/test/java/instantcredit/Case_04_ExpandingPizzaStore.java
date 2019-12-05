@@ -3,7 +3,7 @@ package instantcredit;
 import instantcredit.pizzas.*;
 import org.junit.Test;
 
-public class Case_04_FranchisingPizzaStore {
+public class Case_04_ExpandingPizzaStore {
 
     private PizzaStore nyPizzaStore = new NYPizzaStore();
     private PizzaStore chicagoPizzaStore = new ChicagoPizzaStore();

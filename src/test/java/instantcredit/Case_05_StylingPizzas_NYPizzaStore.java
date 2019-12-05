@@ -4,7 +4,7 @@ import instantcredit.ingredients.*;
 import org.junit.Test;
 
 @SuppressWarnings("unused")
-public class Case_06_AbstractFactory {
+public class Case_05_StylingPizzas_NYPizzaStore {
 
     @Test
     public void play() {
@@ -13,12 +13,36 @@ public class Case_06_AbstractFactory {
         Pizza nyCheesePizza = nyStore.orderPizza("cheese");
         System.out.println(nyCheesePizza);
 
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private class NYPizzaStore extends PizzaStore {
 
         protected Pizza createPizza(String item) {
             Pizza pizza = null;
+
             PizzaIngredientFactory ingredientFactory =
                     new NYPizzaIngredientFactory();
 
@@ -27,26 +51,16 @@ public class Case_06_AbstractFactory {
                 pizza = new CheesePizza(ingredientFactory);
                 pizza.setName("New York Style Cheese Pizza");
 
-//            } else if (item.equals("veggie")) {
-//
-//                pizza = new VeggiePizza(ingredientFactory);
-//                pizza.setName("New York Style Veggie Pizza");
-//
-//            } else if (item.equals("clam")) {
-//
-//                pizza = new ClamPizza(ingredientFactory);
-//                pizza.setName("New York Style Clam Pizza");
-//
-//            } else if (item.equals("pepperoni")) {
-//
-//                pizza = new PepperoniPizza(ingredientFactory);
-//                pizza.setName("New York Style Pepperoni Pizza");
-//
             }
             return pizza;
         }
 
     }
+
+
+
+
+
 
     private abstract class PizzaStore {
 
@@ -63,7 +77,16 @@ public class Case_06_AbstractFactory {
         }
     }
 
-    //The abstract factory
+
+
+
+
+
+
+
+
+
+
     private interface PizzaIngredientFactory {
 
         Dough createDough();

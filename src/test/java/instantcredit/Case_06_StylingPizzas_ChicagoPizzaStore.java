@@ -4,52 +4,43 @@ import instantcredit.ingredients.*;
 import org.junit.Test;
 
 @SuppressWarnings("unused")
-public class Case_05_AbstractFactory_NYPizzaStore {
+public class Case_06_StylingPizzas_ChicagoPizzaStore {
 
     @Test
     public void play() {
 
         PizzaStore nyStore = new NYPizzaStore();
+        PizzaStore chicagoStore = new ChicagoPizzaStore();
+
         Pizza nyCheesePizza = nyStore.orderPizza("cheese");
         System.out.println(nyCheesePizza);
 
+        Pizza chicagoCheesePizza = chicagoStore.orderPizza("cheese");
+        System.out.println(chicagoCheesePizza);
+
+        System.out.println(nyStore.orderPizza("pepperoni"));
+        System.out.println(chicagoStore.orderPizza("pepperoni"));
 
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private class NYPizzaStore extends PizzaStore {
+
+        PizzaIngredientFactory ingredientFactory =
+                new NYPizzaIngredientFactory();
 
         protected Pizza createPizza(String item) {
             Pizza pizza = null;
-
-            PizzaIngredientFactory ingredientFactory =
-                    new NYPizzaIngredientFactory();
 
             if (item.equals("cheese")) {
 
                 pizza = new CheesePizza(ingredientFactory);
                 pizza.setName("New York Style Cheese Pizza");
+
+            } else if (item.equals("pepperoni")) {
+
+                pizza = new PepperoniPizza(ingredientFactory);
+                pizza.setName("New York Style Pepperoni Pizza");
 
             }
             return pizza;
@@ -57,16 +48,33 @@ public class Case_05_AbstractFactory_NYPizzaStore {
 
     }
 
+    public class ChicagoPizzaStore extends PizzaStore {
 
+        protected Pizza createPizza(String item) {
+            Pizza pizza = null;
+            PizzaIngredientFactory ingredientFactory =
+                    new ChicagoPizzaIngredientFactory();
 
+            if (item.equals("cheese")) {
 
+                pizza = new CheesePizza(ingredientFactory);
+                pizza.setName("Chicago Style Cheese Pizza");
 
+            } else if (item.equals("pepperoni")) {
+
+                pizza = new PepperoniPizza(ingredientFactory);
+                pizza.setName("Chicago Style Pepperoni Pizza");
+
+            }
+            return pizza;
+        }
+    }
 
     private abstract class PizzaStore {
 
-        protected abstract Pizza createPizza(String item);
+        abstract Pizza createPizza(String item);
 
-        public Pizza orderPizza(String type) {
+        final Pizza orderPizza(String type) {
             Pizza pizza = createPizza(type);
             System.out.println("--- Making a " + pizza.getName() + " ---");
             pizza.prepare();
@@ -82,12 +90,6 @@ public class Case_05_AbstractFactory_NYPizzaStore {
 
 
 
-
-
-
-
-
-    //The abstract factory
     private interface PizzaIngredientFactory {
 
         Dough createDough();
@@ -128,7 +130,47 @@ public class Case_05_AbstractFactory_NYPizzaStore {
 
     }
 
-    class CheesePizza extends Pizza {
+    public class ChicagoPizzaIngredientFactory implements PizzaIngredientFactory
+    {
+
+        public Dough createDough() {
+            return new ThickCrustDough();
+        }
+
+        public Sauce createSauce() {
+            return new PlumTomatoSauce();
+        }
+
+        public Cheese createCheese() {
+            return new MozzarellaCheese();
+        }
+
+        public Veggies[] createVeggies() {
+            Veggies veggies[] = { new BlackOlives(),
+                    new Spinach(),
+                    new Eggplant() };
+            return veggies;
+        }
+
+        public Pepperoni createPepperoni() {
+            return new SlicedPepperoni();
+        }
+
+        public Clams createClam() {
+            return new FrozenClams();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    private class CheesePizza extends Pizza {
         PizzaIngredientFactory ingredientFactory;
 
         public CheesePizza(PizzaIngredientFactory ingredientFactory) {
@@ -140,6 +182,23 @@ public class Case_05_AbstractFactory_NYPizzaStore {
             dough = ingredientFactory.createDough();
             sauce = ingredientFactory.createSauce();
             cheese = ingredientFactory.createCheese();
+        }
+    }
+
+    private class PepperoniPizza extends Pizza {
+        PizzaIngredientFactory ingredientFactory;
+
+        public PepperoniPizza(PizzaIngredientFactory ingredientFactory) {
+            this.ingredientFactory = ingredientFactory;
+        }
+
+        void prepare() {
+            System.out.println("Preparing " + name);
+            dough = ingredientFactory.createDough();
+            sauce = ingredientFactory.createSauce();
+            cheese = ingredientFactory.createCheese();
+            veggies = ingredientFactory.createVeggies();
+            pepperoni = ingredientFactory.createPepperoni();
         }
     }
 
